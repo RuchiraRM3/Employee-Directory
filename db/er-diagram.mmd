@@ -1,0 +1,31 @@
+erDiagram
+  DEPARTMENT ||--o{ EMPLOYEE : "contains"
+  EMPLOYEE ||--o{ EMPLOYEE_CHANGE : "has history"
+  DEPARTMENT |o--o{ EMPLOYEE_CHANGE : "old department"
+  DEPARTMENT |o--o{ EMPLOYEE_CHANGE : "new department"
+
+  DEPARTMENT {
+    bigint id PK
+    varchar name UK "NOT NULL"
+  }
+  EMPLOYEE {
+    bigint id PK
+    varchar name "NOT NULL"
+    varchar email UK "NOT NULL, case-insensitive"
+    varchar job_title "NOT NULL"
+    bigint department_id FK "NOT NULL"
+    date hire_date "NOT NULL, indexed"
+    varchar status "ACTIVE | ON_LEAVE | TERMINATED"
+    timestamp archived_at "NULL = in directory; set = deleted (archived)"
+    varchar archived_by "Firebase UID"
+  }
+  EMPLOYEE_CHANGE {
+    bigint id PK
+    bigint employee_id FK "NOT NULL"
+    bigint old_department_id FK "nullable"
+    bigint new_department_id FK "nullable"
+    varchar old_job_title "nullable"
+    varchar new_job_title "nullable"
+    timestamp changed_at "NOT NULL"
+    varchar changed_by "Firebase UID, nullable"
+  }
